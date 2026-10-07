@@ -1,0 +1,67 @@
+-----------------------------------------------------------------------
+odoo 19 setup in my local pc window 11
+-------------------------------------------------------------------------
+git clone --depth 1 --branch 19.0 https://github.com/odoo/odoo.git
+cd odoo
+python -m venv venv | or | py -3.12 -m venv venv
+.\venv\Scripts\Activate.ps1
+
+
+-- if dont work --
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+.\venv\Scripts\Activate.ps1
+
+notepad odoo.conf
+
+-----------------------------------------
+
+[options]
+
+admin_passwd = admin
+
+db_host = localhost
+db_port = 5432
+db_user = odoo
+db_password = odoo
+
+addons_path = C:\Users\hp\Desktop\odoo project\odoo\addons,C:\Users\hp\Desktop\odoo project\custom-addons
+
+http_port = 8069
+
+
+
+---------------------------------------
+
+
+
+python -m pip install --upgrade pip setuptools wheel
+
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+-- run --
+cd "C:\Users\hp\Desktop\odoo project\odoo comunity\odoo"
+.\venv\Scripts\Activate.ps1
+
+python odoo-bin -c "..\odoo.conf"
+
+
+
+
+
+
+-- Postgres sql setup in docker --
+
+docker pull postgres:17
+docker volume create odoo-postgres-data
+docker run -d `
+  --name odoo-postgres `
+  -e POSTGRES_USER=odoo `
+  -e POSTGRES_PASSWORD=odoo `
+  -e POSTGRES_DB=postgres `
+  -p 5432:5432 `
+  -v odoo-postgres-data:/var/lib/postgresql/data `
+  postgres:17
+
+-- test docker --
+docker exec -it odoo-postgres psql -U odoo -d postgres
